@@ -4,7 +4,7 @@
 ## NOTE: 
 The Pixelmon jar is not found above as it's >25MB. Download the release zip
 
-## Modlist
+## Credit
 https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go/files?page=1&pageSize=1&version=1.16.5&gameVersionTypeId=1    
 https://www.curseforge.com/minecraft/mc-mods/sophisticated-backpacks/files?page=1&pageSize=1&version=1.16.5&gameVersionTypeId=1  
 https://www.curseforge.com/minecraft/mc-mods/pixelmon/files?page=1&pageSize=1&version=1.16.5&gameVersionTypeId=1  
