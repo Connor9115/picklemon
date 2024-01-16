@@ -56,7 +56,8 @@ if EXIST .minecraft\ (
 		SET timedate=%%F
 	)
 	:: Format it correctly with the time
-	set timedate=!timedate:/=-!T%TIME%0Z
+	set timedate=!timedate:/=-!T0%TIME%0Z
+	set timedate=!timedate: =!
 	:: Add installation profile
 	cd %dirname%
 	CALL :addmodprofile
