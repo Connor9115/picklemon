@@ -1,8 +1,13 @@
 @echo off
 set version=2.1
-set dirname=Picklemon%version%
-if not exist picklemon.zip (
-	echo picklemon.zip is not in the same folder!
+set mcVersion=1.16.5
+set forgeVersion=36.2.34
+set packName=Picklemon
+set zipName=picklemon
+set dirName=%zipName%%version%
+
+if not exist %zipName%.zip (
+	echo %zipName%.zip is not in the same folder!
 	echo Make sure the zip is in the following folder:
 	echo %~dp0
 	pause
@@ -19,47 +24,40 @@ if %jreInstalled%==false (
 )
 cd %AppData%\
 echo|set /p="Forge? "
-if NOT EXIST .minecraft\versions\1.16.5-forge-36.2.34 (
+if NOT EXIST .minecraft\versions\%mcVersion%-forge-%forgeVersion% (
 	echo NOT installed! Installing...
-	powershell Invoke-WebRequest -Uri https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.34/forge-1.16.5-36.2.34-installer.jar -OutFile $env:USERPROFILE\Downloads\forge-1.16.5-36.2.34-installer.jar | echo >nul 2>&1
-	java -jar %USERPROFILE%\Downloads\forge-1.16.5-36.2.34-installer.jar >nul 2>&1
+	powershell Invoke-WebRequest -Uri https://maven.minecraftforge.net/net/minecraftforge/forge/%mcVersion%-%forgeVersion%/forge-%mcVersion%-%forgeVersion%-installer.jar -OutFile $env:USERPROFILE\Downloads\forge-%mcVersion%-%forgeVersion%-installer.jar | echo >nul 2>&1
+	java -jar %USERPROFILE%\Downloads\forge-%mcVersion%-%forgeVersion%-installer.jar >nul 2>&1
 	ping 127.0.0.1 -n 1 -w 500 >nul
-	del forge-1.16.5-36.2.34-installer.jar.log
-	del %USERPROFILE%\Downloads\forge-1.16.5-36.2.34-installer.jar
+	del forge-%mcVersion%-%forgeVersion%-installer.jar.log
+	del %USERPROFILE%\Downloads\forge-%mcVersion%-%forgeVersion%-installer.jar
 ) else (
 	echo Installed
 )
-if exist %dirname%\ (
-	echo Picklemon already installed!
+if exist %dirName%\ (
+	echo %packName% already installed!
 	pause
 	EXIT /B 1
 )
-mkdir %dirname%\mods\
+mkdir %dirName%\mods\
 echo Extracting mods to installation folder
-powershell Expand-Archive -Path %~dp0\picklemon.zip -DestinationPath %dirname%\mods\
+powershell Expand-Archive -Path %~dp0\%zipName%.zip -DestinationPath %dirName%\mods\
 
 if EXIST .minecraft\ (
 	setlocal enabledelayedexpansion
 	:: Copy required files from main MC installation
 	echo Copying settings and keybinds
-	xcopy /q .minecraft\launcher_accounts_microsoft_store.json %dirname%\ >nul 2>&1
-	xcopy /q .minecraft\launcher_profiles.json %dirname%\ >nul 2>&1
-	xcopy /q .minecraft\launcher_settings.json %dirname%\ >nul 2>&1
-	xcopy /q .minecraft\options.txt %dirname%\ >nul 2>&1
-	xcopy /q .minecraft\servers.dat %dirname%\ >nul 2>&1
-	xcopy /q .minecraft\usercache.json %dirname%\ >nul 2>&1
+	xcopy /q .minecraft\launcher_accounts_microsoft_store.json %dirName%\ >nul 2>&1
+	xcopy /q .minecraft\launcher_profiles.json %dirName%\ >nul 2>&1
+	xcopy /q .minecraft\launcher_settings.json %dirName%\ >nul 2>&1
+	xcopy /q .minecraft\options.txt %dirName%\ >nul 2>&1
+	xcopy /q .minecraft\servers.dat %dirName%\ >nul 2>&1
+	xcopy /q .minecraft\usercache.json %dirName%\ >nul 2>&1
 	if exist .minecraft\optionsof.txt (
-		xcopy /q .minecraft\optionsof.txt %dirname%\ >nul 2>&1
+		xcopy /q .minecraft\optionsof.txt %dirName%\ >nul 2>&1
 	)
-	:: Get date so the installation is selected by default
-	FOR /F "tokens=* USEBACKQ" %%F IN (`echo %DATE%`) DO (
-		SET timedate=%%F
-	)
-	:: Format it correctly with the time
-	set timedate=!timedate:/=-!T0%TIME%0Z
-	set timedate=!timedate: =!
 	:: Add installation profile
-	cd %dirname%
+	cd %dirName%
 	CALL :addmodprofile
 	cd ..\.minecraft\
 	CALL :addmodprofile
@@ -68,7 +66,7 @@ if EXIST .minecraft\ (
 	echo Minecraft not detected. Skipping config edits.
 )
 echo.
-echo Picklemon successfully installed!
+echo %packName% successfully installed!
 pause
 EXIT /B %ERRORLEVEL%
 
@@ -79,13 +77,11 @@ if NOT EXIST launcher_profiles.json (
 (
 echo {
 echo   "profiles" : {
-echo     "%dirname%" : {
-echo       "created" : "%timedate%",
-echo       "gameDir" : "C:\\Users\\%USERNAME%\\AppData\\Roaming\\%dirname%",
+echo     "%dirName%" : {
+echo       "gameDir" : "C:\\Users\\%USERNAME%\\AppData\\Roaming\\%dirName%",
 echo       "icon" : "Furnace",
-echo       "lastUsed" : "%timedate%",
-echo       "lastVersionId" : "1.16.5-forge-36.2.34",
-echo       "name" : "%dirname%",
+echo       "lastVersionId" : "%mcVersion%-forge-%forgeVersion%",
+echo       "name" : "%dirName%",
 echo       "type" : "custom"
 echo     },
 )>"launcher_profiles.json.new"
