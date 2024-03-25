@@ -27,7 +27,7 @@ echo|set /p="Forge? "
 if NOT EXIST .minecraft\versions\%mcVersion%-forge-%forgeVersion% (
 	echo NOT installed! Installing...
 	powershell Invoke-WebRequest -Uri https://maven.minecraftforge.net/net/minecraftforge/forge/%mcVersion%-%forgeVersion%/forge-%mcVersion%-%forgeVersion%-installer.jar -OutFile $env:USERPROFILE\Downloads\forge-%mcVersion%-%forgeVersion%-installer.jar | echo >nul 2>&1
-	java -jar %USERPROFILE%\Downloads\forge-%mcVersion%-%forgeVersion%-installer.jar >nul 2>&1
+	powershell java -jar %USERPROFILE%\Downloads\forge-%mcVersion%-%forgeVersion%-installer.jar >nul 2>&1
 	ping 127.0.0.1 -n 1 -w 500 >nul
 	del forge-%mcVersion%-%forgeVersion%-installer.jar.log
 	del %USERPROFILE%\Downloads\forge-%mcVersion%-%forgeVersion%-installer.jar
