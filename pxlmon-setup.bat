@@ -15,7 +15,7 @@ if not exist %zipName%.zip (
 )
 echo|set /p="Java? "
 set jreInstalled=true
-powershell "Get-Package java*" | find "Exception" >nul 2>&1 && set jreInstalled=false
+winget list java >nul || set jreInstalled=false
 if %jreInstalled%==false (
 	echo NOT installed! Installing...
 	winget install Oracle.JavaRuntimeEnvironment >nul 2>&1
@@ -41,7 +41,7 @@ if exist %dirName%\ (
 )
 mkdir %dirName%\mods\
 echo Extracting mods to installation folder
-powershell Expand-Archive -Path %~dp0\%zipName%.zip -DestinationPath %dirName%\mods\
+tar -xf %~dp0%zipName%.zip -C %dirName%\mods\
 
 if EXIST .minecraft\ (
 	setlocal enabledelayedexpansion
